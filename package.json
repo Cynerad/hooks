@@ -1,0 +1,44 @@
+{
+  "name": "@cynerad/hooks",
+  "type": "module",
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.10.0",
+  "description": "Collection of hooks for react projects.",
+  "author": "javad gharibi",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "typescript",
+    "hooks"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky",
+    "registry:build": "shadcn build",
+    "dev": "vitest",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "howler": "^2.2.4",
+    "react": "^19.2.4",
+    "shadcn": "^3.6.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^6.7.3",
+    "@changesets/cli": "^2.29.8",
+    "@types/howler": "^2.2.12",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.13",
+    "eslint": "^9.39.2",
+    "eslint-plugin-format": "^1.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  },
+  "lint-staged": {
+    "*": "pnpm lint"
+  }
+}
