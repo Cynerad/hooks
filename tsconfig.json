@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-
     "target": "es2022",
     /* If your code runs in the DOM: */
     "lib": ["es2022", "dom", "dom.iterable"],
@@ -8,15 +7,42 @@
     "module": "ESNext",
     /* If NOT transpiling with TypeScript: */
     "moduleResolution": "Bundler",
+    /* Path Aliases */
+    "paths": {
+      "@/hooks/*": ["./src/hooks/*"]
+    },
     "resolveJsonModule": true,
-    "types": ["node"],
     "allowJs": true,
     /* Strictness */
     "strict": true,
+
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": true,
+
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+
     "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "useUnknownInCatchVariables": true,
     "noEmit": true,
     /* Base Options: */
     "esModuleInterop": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   }
