@@ -21,22 +21,22 @@
   },
   "dependencies": {
     "howler": "^2.2.4",
-    "react": "^19.2.4",
-    "shadcn": "^4.12.0"
+    "react": "^19.2.7",
+    "shadcn": "^4.13.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^6.7.3",
-    "@changesets/cli": "^2.29.8",
-    "@types/howler": "^2.2.12",
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.13",
-    "eslint": "^9.39.2",
-    "eslint-plugin-format": "^1.1.0",
+    "@changesets/cli": "^2.31.0",
+    "@types/howler": "^2.2.13",
+    "@types/node": "^25.9.4",
+    "@types/react": "^19.2.17",
+    "eslint": "^9.39.4",
+    "eslint-plugin-format": "^1.5.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
+    "lint-staged": "^16.4.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.16"
+    "vitest": "^4.1.10"
   },
   "lint-staged": {
     "*": "pnpm lint"
