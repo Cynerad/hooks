@@ -19,16 +19,16 @@ Collection of hooks for react projects.
 
 ```bash
 # Install from npm
-npx shadcn@latest add https://cynerad.github.io/hooks/public/r/hooks.json
+npx shadcn@latest add https://cynerad.github.io/hooks/public/r/all.json
 
 # install from pnpm
-pnpm dlx shadcn@latest add https://cynerad.github.io/hooks/public/r/hooks.json
+pnpm dlx shadcn@latest add https://cynerad.github.io/hooks/public/r/all.json
 
 # install from yarn
-yarn shadcn@latest add https://cynerad.github.io/hooks/public/r/hooks.json
+yarn shadcn@latest add https://cynerad.github.io/hooks/public/r/all.json
 
 # install from bun
-bun x shadcn@latest add https://cynerad.github.io/hooks/public/r/hooks.json
+bun x shadcn@latest add https://cynerad.github.io/hooks/public/r/all.json
 
 ```
 
