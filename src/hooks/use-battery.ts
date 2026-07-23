@@ -62,6 +62,7 @@ function useBattery(): BatteryState {
     }
 
     let battery: BatteryManager | null = null;
+    const controller = new AbortController();
 
     const updateState = () => {
       if (!battery)
@@ -79,19 +80,15 @@ function useBattery(): BatteryState {
     navigatorWithBattery.getBattery().then((b) => {
       battery = b;
       updateState();
-      b.addEventListener("levelchange", updateState);
-      b.addEventListener("chargingchange", updateState);
-      b.addEventListener("chargingtimechange", updateState);
-      b.addEventListener("dischargingtimechange", updateState);
+      const opts = { signal: controller.signal };
+      b.addEventListener("levelchange", updateState, opts);
+      b.addEventListener("chargingchange", updateState, opts);
+      b.addEventListener("chargingtimechange", updateState, opts);
+      b.addEventListener("dischargingtimechange", updateState, opts);
     });
 
     return () => {
-      if (!battery)
-        return;
-      battery.removeEventListener("levelchange", updateState);
-      battery.removeEventListener("chargingchange", updateState);
-      battery.removeEventListener("chargingtimechange", updateState);
-      battery.removeEventListener("dischargingtimechange", updateState);
+      controller.abort();
     };
   }, []);
 

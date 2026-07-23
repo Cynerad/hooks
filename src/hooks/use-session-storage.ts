@@ -21,7 +21,7 @@ function getSessionStorageItem(key: string) {
   return window.sessionStorage.getItem(key);
 }
 
-function useSessionStorageSubscribe(
+function sessionStorageSubscribe(
   callback: EventListenerOrEventListenerObject,
 ) {
   window.addEventListener("storage", callback);
@@ -41,7 +41,7 @@ function useSessionStorage<T>(
   const getSnapshot = () => getSessionStorageItem(key);
 
   const store = useSyncExternalStore(
-    useSessionStorageSubscribe,
+    sessionStorageSubscribe,
     getSnapshot,
     getSessionStorageServerSnapshot,
   );

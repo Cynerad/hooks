@@ -18,7 +18,7 @@ export type HistoryState<T> = {
   canRedo: boolean;
 };
 
-function useHistoryStateReducer<T>(state: HistoryStateType<T>, action: HistoryAction<T>): HistoryStateType<T> {
+function historyStateReducer<T>(state: HistoryStateType<T>, action: HistoryAction<T>): HistoryStateType<T> {
   const { past, present, future } = state;
   switch (action.type) {
     case "UNDO":
@@ -59,7 +59,7 @@ function useHistoryStateReducer<T>(state: HistoryStateType<T>, action: HistoryAc
 function useHistoryState<T>(initialPresent: T): HistoryState<T> {
   const initialPresentRef = useRef(initialPresent);
 
-  const [state, dispatch] = useReducer(useHistoryStateReducer<T>, initialPresent, present => ({ past: [], present, future: [] }));
+  const [state, dispatch] = useReducer(historyStateReducer<T>, initialPresent, present => ({ past: [], present, future: [] }));
 
   const canUndo = state.past.length > 0;
   const canRedo = state.future.length > 0;

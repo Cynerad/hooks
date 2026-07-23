@@ -22,6 +22,7 @@ type NetworkState = {
 };
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface Navigator {
     connection?: NetworkInformation;
     mozConnection?: NetworkInformation;
@@ -30,7 +31,11 @@ declare global {
 }
 
 function getConnection(): NetworkInformation | undefined {
-  return navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
+  return (
+    navigator?.connection ||
+    navigator?.mozConnection ||
+    navigator?.webkitConnection
+  );
 }
 
 function isShallowEqual<T extends object>(a: T, b: T) {
@@ -51,7 +56,7 @@ function isShallowEqual<T extends object>(a: T, b: T) {
   return true;
 }
 
-function useNetworkStateSubscribe(onStoreChange: () => void) {
+function networkStateSubscribe(onStoreChange: () => void) {
   const handler = () => onStoreChange();
 
   window.addEventListener("online", handler, { passive: true });
@@ -77,7 +82,7 @@ function getNetworkStateServerSnapshot(): never {
 }
 
 export function useNetworkState(): NetworkState {
-  const cache = useRef<NetworkState | null>(null);
+  const cacheRef = useRef<NetworkState | null>(null);
 
   const getSnapshot = (): NetworkState => {
     const online = navigator.onLine;
@@ -93,13 +98,17 @@ export function useNetworkState(): NetworkState {
       type: connection?.type,
     };
 
-    if (cache.current && isShallowEqual(cache.current, nextState)) {
-      return cache.current;
+    if (cacheRef.current && isShallowEqual(cacheRef.current, nextState)) {
+      return cacheRef.current;
     }
 
-    cache.current = nextState;
+    cacheRef.current = nextState;
     return nextState;
   };
 
-  return useSyncExternalStore(useNetworkStateSubscribe, getSnapshot, getNetworkStateServerSnapshot);
+  return useSyncExternalStore(
+    networkStateSubscribe,
+    getSnapshot,
+    getNetworkStateServerSnapshot,
+  );
 }

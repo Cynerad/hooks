@@ -26,7 +26,7 @@ function useFocusWithin<T extends HTMLElement = HTMLElement>({
 }: UseFocusWithinOptions = {}): UseFocusWithinReturnValue<T> {
   const [focused, setFocused] = useState(false);
   const focusedRef = useRef(false);
-  const previousNode = useRef<T | null>(null);
+  const previousNodeRef = useRef<T | null>(null);
 
   const onFocusRef = useCallbackRef(onFocus);
   const onBlurRef = useCallbackRef(onBlur);
@@ -41,7 +41,6 @@ function useFocusWithin<T extends HTMLElement = HTMLElement>({
       _setFocused(true);
       onFocusRef(event);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFocusOut = useCallback((event: FocusEvent) => {
@@ -49,7 +48,6 @@ function useFocusWithin<T extends HTMLElement = HTMLElement>({
       _setFocused(false);
       onBlurRef(event);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const callbackRef: React.RefCallback<T | null> = useCallback(
@@ -58,26 +56,26 @@ function useFocusWithin<T extends HTMLElement = HTMLElement>({
         return;
       }
 
-      if (previousNode.current) {
-        previousNode.current.removeEventListener("focusin", handleFocusIn);
-        previousNode.current.removeEventListener("focusout", handleFocusOut);
+      if (previousNodeRef.current) {
+        previousNodeRef.current.removeEventListener("focusin", handleFocusIn);
+        previousNodeRef.current.removeEventListener("focusout", handleFocusOut);
       }
 
       node.addEventListener("focusin", handleFocusIn);
       node.addEventListener("focusout", handleFocusOut);
-      previousNode.current = node;
+      previousNodeRef.current = node;
     },
     [handleFocusIn, handleFocusOut],
   );
 
   useEffect(
     () => () => {
-      if (previousNode.current) {
-        previousNode.current.removeEventListener("focusin", handleFocusIn);
-        previousNode.current.removeEventListener("focusout", handleFocusOut);
+      if (previousNodeRef.current) {
+        previousNodeRef.current.removeEventListener("focusin", handleFocusIn);
+        previousNodeRef.current.removeEventListener("focusout", handleFocusOut);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [],
   );
 

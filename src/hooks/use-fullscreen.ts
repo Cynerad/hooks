@@ -81,11 +81,11 @@ export type UseFullscreenElementReturnValue<T extends HTMLElement> = {
 
 export function useFullscreenElement<T extends HTMLElement = HTMLDivElement>(): UseFullscreenElementReturnValue<T> {
   const [fullscreen, setFullscreen] = useState(false);
-  const refElement = useRef<T | null>(null);
+  const elementRef = useRef<T | null>(null);
   const prevNodeRef = useRef<T | null>(null);
 
   const handleFullscreenChange = useCallback(() => {
-    setFullscreen(refElement.current === getFullscreenElement());
+    setFullscreen(elementRef.current === getFullscreenElement());
   }, []);
 
   const handleFullscreenError = useCallback(() => {
@@ -93,8 +93,8 @@ export function useFullscreenElement<T extends HTMLElement = HTMLDivElement>(): 
   }, []);
 
   const toggle = useCallback(async () => {
-    if (!getFullscreenElement() && refElement.current) {
-      await enterFullScreen(refElement.current);
+    if (!getFullscreenElement() && elementRef.current) {
+      await enterFullScreen(elementRef.current);
     }
     else {
       await exitFullscreen();
@@ -116,9 +116,8 @@ export function useFullscreenElement<T extends HTMLElement = HTMLDivElement>(): 
       });
     }
 
-    refElement.current = node;
+    elementRef.current = node;
     prevNodeRef.current = node;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { ref: refCallback, toggle, fullscreen };

@@ -48,10 +48,10 @@ function useEventListener<
   options?: boolean | AddEventListenerOptions,
 ) {
   // Create a ref that stores handler
-  const savedHandler = useRef(handler);
+  const savedHandlerRef = useRef(handler);
 
   useEffect(() => {
-    savedHandler.current = handler;
+    savedHandlerRef.current = handler;
   }, [handler]);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ function useEventListener<
       return;
 
     const listener: typeof handler = (event) => {
-      savedHandler.current(event);
+      savedHandlerRef.current(event);
     };
 
     targetElement.addEventListener(eventName, listener, options);

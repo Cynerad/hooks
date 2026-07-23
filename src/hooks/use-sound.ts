@@ -45,7 +45,6 @@ export function useSound<T extends SpriteMap | undefined = undefined>(url: strin
   });
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
     setIsLoaded(false);
     setDuration(null);
@@ -127,7 +126,6 @@ export function useSound<T extends SpriteMap | undefined = undefined>(url: strin
     stop,
     pause,
     duration,
-    // eslint-disable-next-line react-hooks/refs
     sound: howlRef.current,
     isLoading,
     isLoaded,

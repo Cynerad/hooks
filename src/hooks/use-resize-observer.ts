@@ -22,12 +22,12 @@ const initialSize: Size = {
 
 export function useResizeObserver<T extends HTMLElement = HTMLElement>(options: UseResizeObserverOptions<T>): Size {
   const { ref, box = "content-box" } = options;
-  const [{ width, height }, setSize] = useState<Size>(initialSize);
+  const [size, setSize] = useState<Size>(initialSize);
   const isMounted = useIsMounted();
-  const previousSize = useRef<Size>({ ...initialSize });
-  const onResize = useRef<((size: Size) => void) | undefined>(undefined);
+  const previousSizeRef = useRef<Size>({ ...initialSize });
+  const onResizeRef = useRef<((size: Size) => void) | undefined>(undefined);
   useEffect(() => {
-    onResize.current = options.onResize;
+    onResizeRef.current = options.onResize;
   }, [options.onResize]);
 
   useEffect(() => {
@@ -44,15 +44,15 @@ export function useResizeObserver<T extends HTMLElement = HTMLElement>(options: 
       const newWidth = extractSize(entry!, boxProp, "inlineSize");
       const newHeight = extractSize(entry!, boxProp, "blockSize");
 
-      const hasChanged = previousSize.current.width !== newWidth || previousSize.current.height !== newHeight;
+      const hasChanged = previousSizeRef.current.width !== newWidth || previousSizeRef.current.height !== newHeight;
 
       if (hasChanged) {
         const newSize: Size = { width: newWidth, height: newHeight };
-        previousSize.current.width = newWidth;
-        previousSize.current.height = newHeight;
+        previousSizeRef.current.width = newWidth;
+        previousSizeRef.current.height = newHeight;
 
-        if (onResize.current) {
-          onResize.current(newSize);
+        if (onResizeRef.current) {
+          onResizeRef.current(newSize);
         }
         else {
           if (isMounted()) {
@@ -69,7 +69,7 @@ export function useResizeObserver<T extends HTMLElement = HTMLElement>(options: 
     };
   }, [box, ref, isMounted]);
 
-  return { width, height };
+  return size;
 }
 
 type BoxSizesKey = keyof Pick<ResizeObserverEntry, "borderBoxSize" | "contentBoxSize" | "devicePixelContentBoxSize">;
