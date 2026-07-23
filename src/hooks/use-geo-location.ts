@@ -55,17 +55,9 @@ export function useGeolocation(options: PositionOptions = {}) {
       }));
     };
 
-    navigator.geolocation.getCurrentPosition(
-      onEvent,
-      onEventError,
-      optionsRef.current,
-    );
+    navigator.geolocation.getCurrentPosition(onEvent, onEventError, optionsRef.current);
 
-    const watchId = navigator.geolocation.watchPosition(
-      onEvent,
-      onEventError,
-      optionsRef.current,
-    );
+    const watchId = navigator.geolocation.watchPosition(onEvent, onEventError, optionsRef.current);
 
     return () => {
       navigator.geolocation.clearWatch(watchId);

@@ -29,24 +29,10 @@ export type SoundControls = {
   isLoaded: boolean;
 };
 
-export type UseSoundReturn<T extends SpriteMap | undefined = undefined> = [
-  (options?: PlayOptions<T>) => void,
-  SoundControls,
-];
+export type UseSoundReturn<T extends SpriteMap | undefined = undefined> = [(options?: PlayOptions<T>) => void, SoundControls];
 
-export function useSound<T extends SpriteMap | undefined = undefined>(
-  url: string,
-  opts: UseSoundOptions<T> = {},
-): UseSoundReturn<T> {
-  const {
-    volume = 1,
-    playbackRate = 1,
-    interrupt = false,
-    soundEnabled = true,
-    sprite,
-    onload,
-    ...howlDelegated
-  } = opts;
+export function useSound<T extends SpriteMap | undefined = undefined>(url: string, opts: UseSoundOptions<T> = {}): UseSoundReturn<T> {
+  const { volume = 1, playbackRate = 1, interrupt = false, soundEnabled = true, sprite, onload, ...howlDelegated } = opts;
 
   const howlRef = useRef<Howl | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,6 +45,7 @@ export function useSound<T extends SpriteMap | undefined = undefined>(
   });
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoading(true);
     setIsLoaded(false);
     setDuration(null);
@@ -89,7 +76,7 @@ export function useSound<T extends SpriteMap | undefined = undefined>(
     return () => {
       howlRef.current?.unload();
     };
-  }, [url, JSON.stringify(sprite)]);
+  }, [howlDelegated, onload, playbackRate, sprite, url, volume]);
 
   useEffect(() => {
     howlRef.current?.volume(volume);
@@ -99,41 +86,34 @@ export function useSound<T extends SpriteMap | undefined = undefined>(
     howlRef.current?.rate(playbackRate);
   }, [playbackRate]);
 
-  const play = useCallback(
-    (playOpts: PlayOptions<T> = {}) => {
-      const {
-        forceSoundEnabled = false,
-        playbackRate: callPlaybackRate,
-        id,
-      } = playOpts;
+  const play = useCallback((playOpts: PlayOptions<T> = {}) => {
+    const { forceSoundEnabled = false, playbackRate: callPlaybackRate, id } = playOpts;
 
-      const { soundEnabled, interrupt, volume } = optsRef.current;
+    const { soundEnabled, interrupt, volume } = optsRef.current;
 
-      if (!forceSoundEnabled && !soundEnabled)
-        return;
+    if (!forceSoundEnabled && !soundEnabled)
+      return;
 
-      const howl = howlRef.current;
-      if (!howl)
-        return;
+    const howl = howlRef.current;
+    if (!howl)
+      return;
 
-      if (callPlaybackRate !== undefined) {
-        howl.rate(callPlaybackRate);
-      }
+    if (callPlaybackRate !== undefined) {
+      howl.rate(callPlaybackRate);
+    }
 
-      if (interrupt) {
-        howl.stop();
-      }
+    if (interrupt) {
+      howl.stop();
+    }
 
-      if (id) {
-        howl.play(id as string);
-      }
-      else {
-        howl.volume(volume);
-        howl.play();
-      }
-    },
-    [],
-  );
+    if (id) {
+      howl.play(id as string);
+    }
+    else {
+      howl.volume(volume);
+      howl.play();
+    }
+  }, []);
 
   const stop = useCallback((id?: number) => {
     howlRef.current?.stop(id);
@@ -147,6 +127,7 @@ export function useSound<T extends SpriteMap | undefined = undefined>(
     stop,
     pause,
     duration,
+    // eslint-disable-next-line react-hooks/refs
     sound: howlRef.current,
     isLoading,
     isLoaded,
@@ -159,10 +140,7 @@ export type LazySoundControls = {
   preload: () => void;
 } & SoundControls;
 
-export type UseSoundLazyReturn<T extends SpriteMap | undefined = undefined> = [
-  (options?: PlayOptions<T>) => void,
-  LazySoundControls,
-];
+export type UseSoundLazyReturn<T extends SpriteMap | undefined = undefined> = [(options?: PlayOptions<T>) => void, LazySoundControls];
 
 export function useSoundLazy<T extends SpriteMap | undefined = undefined>(
   url: string,

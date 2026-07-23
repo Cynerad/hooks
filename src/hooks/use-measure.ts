@@ -26,15 +26,11 @@ function useMeasure() {
       if (!entry)
         return;
 
-      const boxSize = Array.isArray(entry.borderBoxSize)
-        ? entry.borderBoxSize[0]
-        : entry.borderBoxSize;
+      const boxSize = Array.isArray(entry.borderBoxSize) ? entry.borderBoxSize[0] : entry.borderBoxSize;
 
-      const width
-        = boxSize?.inlineSize ?? entry.contentRect.width;
+      const width = boxSize?.inlineSize ?? entry.contentRect.width;
 
-      const height
-        = boxSize?.blockSize ?? entry.contentRect.height;
+      const height = boxSize?.blockSize ?? entry.contentRect.height;
 
       setDimensions({ width, height });
     });

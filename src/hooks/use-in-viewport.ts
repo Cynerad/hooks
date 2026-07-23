@@ -7,10 +7,7 @@ type UseInViewOptions = {
   once?: boolean;
 };
 
-export function useInViewport(
-  ref: React.RefObject<HTMLElement | null>,
-  options: UseInViewOptions = {},
-): boolean {
+export function useInViewport(ref: React.RefObject<HTMLElement | null>, options: UseInViewOptions = {}): boolean {
   const { threshold = 0, root = null, rootMargin = "0px", once = false } = options;
   const [isInView, setIsInView] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);

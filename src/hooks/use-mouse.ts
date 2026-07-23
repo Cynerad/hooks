@@ -50,4 +50,3 @@ function useMouse<T extends HTMLElement = HTMLElement>() {
 }
 
 export default useMouse;
-;

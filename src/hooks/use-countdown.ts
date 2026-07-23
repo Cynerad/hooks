@@ -1,46 +1,71 @@
-import { useEffect, useEffectEvent, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-function useCountdown(endTime: number, options: {
-  interval: number;
-  onComplete: () => void;
-  onTick: () => void;
-}) {
-  const [count, setCount] = useState<number | null>(null);
-  const intervalIdRef = useRef<number | null>(null);
+type CountdownOptions = {
+  countStart: number;
 
-  const handleClearInterval = () => {
-    if (intervalIdRef.current === null)
+  intervalMs?: number;
+  isIncrement?: boolean;
+
+  countStop?: number;
+};
+
+type CountdownControllers = {
+  startCountdown: () => void;
+  stopCountdown: () => void;
+  resetCountdown: () => void;
+};
+
+export default function useCountdown({
+  countStart,
+  countStop = 0,
+  intervalMs = 1000,
+  isIncrement = false,
+}: CountdownOptions): [number, CountdownControllers] {
+  const savedCallback = useRef(() => {});
+
+  const [count, setCount] = useState(countStart);
+  const increment = useCallback(() => setCount(count + 1), [count]);
+  const decrement = useCallback(() => setCount(count - 1), [count]);
+  const resetCounter = useCallback(() => setCount(countStart), [countStart]);
+
+  const [isCountdownRunning, setIsCountdownRunning] = useState(false);
+  const startCountdown = useCallback(() => setIsCountdownRunning(true), []);
+  const stopCountdown = useCallback(() => setIsCountdownRunning(false), []);
+
+  // Will set running false and reset the seconds to initial value.
+  const resetCountdown = useCallback(() => {
+    stopCountdown();
+    resetCounter();
+  }, [stopCountdown, resetCounter]);
+
+  const countdownCallback = useCallback(() => {
+    if (count === countStop) {
+      stopCountdown();
       return;
-    window.clearInterval(intervalIdRef.current);
-  };
+    }
 
-  const onTick = useEffectEvent(() => {
-    setCount((prev) => {
-      if (prev === null)
-        return prev;
+    if (isIncrement) {
+      increment();
+    }
+    else {
+      decrement();
+    }
+  }, [count, countStop, decrement, increment, isIncrement, stopCountdown]);
 
-      if (prev <= 1) {
-        handleClearInterval();
-        options.onComplete();
-        return 0;
-      }
-
-      options.onTick();
-      return prev - 1;
-    });
+  useEffect(() => {
+    savedCallback.current = countdownCallback;
   });
 
-  useEffect(() => {
-    intervalIdRef.current = window.setInterval(onTick, options.interval);
-
-    return () => handleClearInterval();
-  }, [options.interval]);
+  const delay = isCountdownRunning ? intervalMs : null;
 
   useEffect(() => {
-    setCount(Math.round((endTime - Date.now()) / options.interval));
-  }, [endTime, options.interval]);
+    if (delay !== null) {
+      const interval = setInterval(() => savedCallback.current(), delay || 0);
+      return () => clearInterval(interval);
+    }
 
-  return count;
+    return undefined;
+  }, [delay]);
+
+  return [count, { startCountdown, stopCountdown, resetCountdown }];
 }
-
-export default useCountdown;

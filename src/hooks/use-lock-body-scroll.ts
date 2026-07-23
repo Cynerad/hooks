@@ -10,4 +10,4 @@ function useLockBodyScroll() {
   }, []);
 }
 
-export default useLockBodyScroll();
+export default useLockBodyScroll;

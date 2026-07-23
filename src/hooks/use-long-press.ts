@@ -23,10 +23,7 @@ function isTouchEvent(e: Event): e is TouchEvent {
   return "touches" in e;
 }
 
-function useLongPress(
-  callback: (e: MouseEvent | TouchEvent) => void,
-  options: LongPressOptions = {},
-): LongPressEventHandlers {
+function useLongPress(callback: (e: MouseEvent | TouchEvent) => void, options: LongPressOptions = {}): LongPressEventHandlers {
   const { threshold = 400, onStart, onFinish, onCancel } = options;
 
   const isLongPressActive = useRef(false);

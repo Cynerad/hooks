@@ -20,14 +20,10 @@ function useEventListener<K extends keyof WindowEventMap>(
 // Element Event based useEventListener interface
 function useEventListener<
   K extends keyof HTMLElementEventMap & keyof SVGElementEventMap,
-  T extends Element = K extends keyof HTMLElementEventMap
-    ? HTMLDivElement
-    : SVGElement,
+  T extends Element = K extends keyof HTMLElementEventMap ? HTMLDivElement : SVGElement,
 >(
   eventName: K,
-  handler:
-    | ((event: HTMLElementEventMap[K]) => void)
-    | ((event: SVGElementEventMap[K]) => void),
+  handler: ((event: HTMLElementEventMap[K]) => void) | ((event: SVGElementEventMap[K]) => void),
   element: RefObject<T>,
   options?: boolean | AddEventListenerOptions,
 ): void;
@@ -47,14 +43,7 @@ function useEventListener<
   T extends HTMLElement | SVGAElement | MediaQueryList = HTMLElement,
 >(
   eventName: KW | KH | KM,
-  handler: (
-    event:
-      | WindowEventMap[KW]
-      | HTMLElementEventMap[KH]
-      | SVGElementEventMap[KH]
-      | MediaQueryListEventMap[KM]
-      | Event,
-  ) => void,
+  handler: (event: WindowEventMap[KW] | HTMLElementEventMap[KH] | SVGElementEventMap[KH] | MediaQueryListEventMap[KM] | Event) => void,
   element?: RefObject<T>,
   options?: boolean | AddEventListenerOptions,
 ) {

@@ -43,28 +43,27 @@ function useBattery(): BatteryState {
   });
 
   useEffect(() => {
-    if (typeof window === "undefined")
-      return;
+    if (typeof window === "undefined") return;
 
     const navigatorWithBattery = navigator as Navigator & {
       getBattery?: () => Promise<BatteryManager>;
     };
 
     if (!navigatorWithBattery.getBattery) {
-      setState(s => ({
-        ...s,
-        supported: false,
-        loading: false,
-      }));
+      queueMicrotask(() => {
+        setState((s) => ({
+          ...s,
+          supported: false,
+          loading: false,
+        }));
+      });
       return;
     }
 
     let battery: BatteryManager | null = null;
 
     const updateState = () => {
-      if (!battery)
-        return;
-
+      if (!battery) return;
       setState({
         supported: true,
         loading: false,
@@ -78,7 +77,6 @@ function useBattery(): BatteryState {
     navigatorWithBattery.getBattery().then((b) => {
       battery = b;
       updateState();
-
       b.addEventListener("levelchange", updateState);
       b.addEventListener("chargingchange", updateState);
       b.addEventListener("chargingtimechange", updateState);
@@ -86,9 +84,7 @@ function useBattery(): BatteryState {
     });
 
     return () => {
-      if (!battery)
-        return;
-
+      if (!battery) return;
       battery.removeEventListener("levelchange", updateState);
       battery.removeEventListener("chargingchange", updateState);
       battery.removeEventListener("chargingtimechange", updateState);

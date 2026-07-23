@@ -4,7 +4,7 @@
   "homepage": "https://cynerad.github.io/hooks",
   "items": [
     {
-      "name": "hooks",
+      "name": "all",
       "type": "registry:hook",
       "title": "Collection of hooks for react projects.",
       "dependencies": ["howler"],
@@ -62,7 +62,26 @@
         { "path": "src/hooks/use-toggle.ts", "type": "registry:hook" },
         { "path": "src/hooks/use-visibility-change.ts", "type": "registry:hook" },
         { "path": "src/hooks/use-window-scroll.ts", "type": "registry:hook" },
-        { "path": "src/hooks/use-window-size.ts", "type": "registry:hook" }
+        { "path": "src/hooks/use-window-size.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-active-element.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-before-unload.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-callback-ref.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-click-outside.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-composed-refs.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-detect-device.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-document-visibility.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-file-upload.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-focus-within.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-fps.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-fullscreen.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-hash.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-is-online.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-os.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-reduced-motion.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-scroll-direction.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-scroll-lock.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-text-selection.ts", "type": "registry:hook" },
+        { "path": "src/hooks/use-window-event.ts", "type": "registry:hook" }
       ]
     }
   ]

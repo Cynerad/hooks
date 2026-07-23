@@ -6,11 +6,7 @@ type HistoryStateType<T> = {
   future: T[];
 };
 
-type HistoryAction<T>
-  = | { type: "UNDO" }
-    | { type: "REDO" }
-    | { type: "SET"; newPresent: T }
-    | { type: "CLEAR"; initialPresent: T };
+type HistoryAction<T> = { type: "UNDO" } | { type: "REDO" } | { type: "SET"; newPresent: T } | { type: "CLEAR"; initialPresent: T };
 
 export type HistoryState<T> = {
   state: T;
@@ -22,12 +18,8 @@ export type HistoryState<T> = {
   canRedo: boolean;
 };
 
-function useHistoryStateReducer<T>(
-  state: HistoryStateType<T>,
-  action: HistoryAction<T>,
-): HistoryStateType<T> {
+function useHistoryStateReducer<T>(state: HistoryStateType<T>, action: HistoryAction<T>): HistoryStateType<T> {
   const { past, present, future } = state;
-
   switch (action.type) {
     case "UNDO":
       if (past.length === 0)
@@ -37,7 +29,6 @@ function useHistoryStateReducer<T>(
         present: past[past.length - 1] as T,
         future: [present, ...future],
       };
-
     case "REDO":
       if (future.length === 0)
         return state;
@@ -46,7 +37,6 @@ function useHistoryStateReducer<T>(
         present: future[0] as T,
         future: future.slice(1),
       };
-
     case "SET":
       if (action.newPresent === present)
         return state;
@@ -55,14 +45,12 @@ function useHistoryStateReducer<T>(
         present: action.newPresent,
         future: [],
       };
-
     case "CLEAR":
       return {
         past: [],
         present: action.initialPresent,
         future: [],
       };
-
     default:
       throw new Error("Unsupported action type");
   }
@@ -71,14 +59,7 @@ function useHistoryStateReducer<T>(
 function useHistoryState<T>(initialPresent: T): HistoryState<T> {
   const initialPresentRef = useRef(initialPresent);
 
-  const [state, dispatch] = useReducer(
-    useHistoryStateReducer<T>,
-    {
-      past: [],
-      present: initialPresentRef.current,
-      future: [],
-    },
-  );
+  const [state, dispatch] = useReducer(useHistoryStateReducer<T>, initialPresent, present => ({ past: [], present, future: [] }));
 
   const canUndo = state.past.length > 0;
   const canRedo = state.future.length > 0;
@@ -93,15 +74,9 @@ function useHistoryState<T>(initialPresent: T): HistoryState<T> {
       dispatch({ type: "REDO" });
   }, [canRedo]);
 
-  const set = useCallback(
-    (newPresent: T) => dispatch({ type: "SET", newPresent }),
-    [],
-  );
+  const set = useCallback((newPresent: T) => dispatch({ type: "SET", newPresent }), []);
 
-  const clear = useCallback(
-    () => dispatch({ type: "CLEAR", initialPresent: initialPresentRef.current }),
-    [],
-  );
+  const clear = useCallback(() => dispatch({ type: "CLEAR", initialPresent: initialPresentRef.current }), []);
 
   return { state: state.present, set, undo, redo, clear, canUndo, canRedo };
 }

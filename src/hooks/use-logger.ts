@@ -1,6 +1,6 @@
 import { useEffect, useEffectEvent, useRef } from "react";
 
-function useLogger(name: string, ...rest: any[]) {
+function useLogger<T>(name: string, ...rest: T[]) {
   const initialRenderRef = useRef(true);
 
   const handleLog = useEffectEvent((event: string) => {

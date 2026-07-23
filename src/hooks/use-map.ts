@@ -1,32 +1,46 @@
-import { useReducer, useRef } from "react";
+import { useCallback, useState } from "react";
 
-function useMap<K, V>(initialEntries?: readonly (readonly [K, V])[] | null) {
-  const mapRef = useRef(new Map<K, V>(initialEntries));
-  const [, reRender] = useReducer(x => x + 1, 0);
+type MapOrEntries<K, V> = Map<K, V> | [K, V][];
 
-  const set = (key: K, value: V) => {
-    mapRef.current.set(key, value);
-    reRender();
-    return mapRef.current;
+type UseMapActions<K, V> = {
+  set: (key: K, value: V) => void;
+  setAll: (entries: MapOrEntries<K, V>) => void;
+  remove: (key: K) => void;
+  reset: Map<K, V>["clear"];
+};
+
+type UseMapReturn<K, V> = [Omit<Map<K, V>, "set" | "clear" | "delete">, UseMapActions<K, V>];
+
+function useMap<K, V>(initialState: MapOrEntries<K, V> = new Map()): UseMapReturn<K, V> {
+  const [map, setMap] = useState(new Map(initialState));
+
+  const actions: UseMapActions<K, V> = {
+    set: useCallback((key, value) => {
+      setMap((prev) => {
+        const copy = new Map(prev);
+        copy.set(key, value);
+        return copy;
+      });
+    }, []),
+
+    setAll: useCallback((entries) => {
+      setMap(() => new Map(entries));
+    }, []),
+
+    remove: useCallback((key) => {
+      setMap((prev) => {
+        const copy = new Map(prev);
+        copy.delete(key);
+        return copy;
+      });
+    }, []),
+
+    reset: useCallback(() => {
+      setMap(() => new Map());
+    }, []),
   };
 
-  const clear = () => {
-    mapRef.current.clear();
-    reRender();
-  };
-
-  const remove = (key: K) => {
-    const res = mapRef.current.delete(key);
-    reRender();
-    return res;
-  };
-
-  return {
-    map: mapRef.current,
-    set,
-    clear,
-    remove,
-  };
+  return [map, actions];
 }
 
 export default useMap;

@@ -21,12 +21,16 @@ type NetworkState = {
   type?: string;
 };
 
+declare global {
+  interface Navigator {
+    connection?: NetworkInformation;
+    mozConnection?: NetworkInformation;
+    webkitConnection?: NetworkInformation;
+  }
+}
+
 function getConnection(): NetworkInformation | undefined {
-  return (
-    (navigator as any)?.connection
-    || (navigator as any)?.mozConnection
-    || (navigator as any)?.webkitConnection
-  );
+  return navigator?.connection || navigator?.mozConnection || navigator?.webkitConnection;
 }
 
 function isShallowEqual<T extends object>(a: T, b: T) {
@@ -97,9 +101,5 @@ export function useNetworkState(): NetworkState {
     return nextState;
   };
 
-  return useSyncExternalStore(
-    useNetworkStateSubscribe,
-    getSnapshot,
-    getNetworkStateServerSnapshot,
-  );
+  return useSyncExternalStore(useNetworkStateSubscribe, getSnapshot, getNetworkStateServerSnapshot);
 }

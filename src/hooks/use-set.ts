@@ -1,29 +1,30 @@
-import { useReducer, useRef } from "react";
+import { useState } from "react";
 
 function useSet<T>(values?: T[]) {
-  const setRef = useRef(new Set(values));
-  const [, reRender] = useReducer(x => x + 1, 0);
+  const [set, setSet] = useState(() => new Set(values));
 
-  setRef.current.add = (...args) => {
-    const res = Set.prototype.add.apply(setRef.current, args);
-    reRender();
+  function add(...args: T[]) {
+    setSet(new Set([...set, ...args]));
+  }
 
-    return res;
+  function clear() {
+    setSet(new Set());
+  }
+
+  function deleteItem(...args: T[]) {
+    setSet(new Set([...set].filter(x => !args.includes(x))));
+  }
+
+  function hasItem(item: T) {
+    return set.has(item);
+  }
+
+  return {
+    add,
+    clear,
+    deleteItem,
+    hasItem,
   };
-
-  setRef.current.clear = (...args) => {
-    Set.prototype.clear.apply(setRef.current, args);
-    reRender();
-  };
-
-  setRef.current.delete = (...args) => {
-    const res = Set.prototype.delete.apply(setRef.current, args);
-    reRender();
-
-    return res;
-  };
-
-  return setRef.current;
 }
 
 export default useSet;
