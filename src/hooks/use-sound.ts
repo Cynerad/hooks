@@ -126,6 +126,7 @@ export function useSound<T extends SpriteMap | undefined = undefined>(url: strin
     stop,
     pause,
     duration,
+
     sound: howlRef.current,
     isLoading,
     isLoaded,
